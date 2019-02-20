@@ -176,14 +176,15 @@ export function reflow(popper) {
 }
 
 /**
- * Adds/removes theme from tooltip's classList
+ * Adds/removes classes from a tooltip's classList
  * @param {HTMLDivElement} tooltip
  * @param {String} action
  * @param {String} theme
+ * @param {String} classSuffix
  */
-export function toggleTheme(tooltip, action, theme) {
+export function toggleClassName(tooltip, action, theme, classSuffix = '') {
   theme.split(' ').forEach(themeName => {
-    tooltip.classList[action](themeName + '-theme')
+    tooltip.classList[action](themeName + classSuffix)
   })
 }
 
@@ -209,7 +210,11 @@ export function createPopperElement(id, props) {
   tooltip.setAttribute('data-size', props.size)
   tooltip.setAttribute('data-animation', props.animation)
   tooltip.setAttribute('data-state', 'hidden')
-  toggleTheme(tooltip, 'add', props.theme)
+  toggleClassName(tooltip, 'add', props.theme, '-theme')
+
+  if (props.className) {
+    toggleClassName(tooltip, 'add', props.className)
+  }
 
   const content = div()
   content.className = 'tippy-content'
@@ -305,8 +310,14 @@ export function updatePopperElement(popper, prevProps, nextProps) {
 
   // theme
   if (prevProps.theme !== nextProps.theme) {
-    toggleTheme(tooltip, 'remove', prevProps.theme)
-    toggleTheme(tooltip, 'add', nextProps.theme)
+    toggleClassName(tooltip, 'remove', prevProps.theme, '-theme')
+    toggleClassName(tooltip, 'add', nextProps.theme, '-theme')
+  }
+
+  // arbitrary classes
+  if (prevProps.className !== nextProps.className) {
+    toggleClassName(tooltip, 'remove', prevProps.className)
+    toggleClassName(tooltip, 'add', nextProps.className)
   }
 }
 

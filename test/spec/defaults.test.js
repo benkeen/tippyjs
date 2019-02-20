@@ -349,6 +349,26 @@ describe('theme', () => {
   })
 })
 
+describe('className', () => {
+  it('adds single class to the tooltip class list', () => {
+    const {
+      popperChildren: { tooltip },
+    } = tippy(h(), {
+      className: 'hello',
+    })
+    expect(tooltip.classList.contains('hello')).toBe(true)
+  })
+  it('adds multiple classes to the tooltip class list', () => {
+    const {
+      popperChildren: { tooltip },
+    } = tippy(h(), {
+      className: 'hello world',
+    })
+    expect(tooltip.classList.contains('hello')).toBe(true)
+    expect(tooltip.classList.contains('world')).toBe(true)
+  })
+})
+
 describe('role', () => {
   it('sets "role" attribute to popper element', () => {
     const { popper: a } = tippy(h(), { role: 'menu' })
